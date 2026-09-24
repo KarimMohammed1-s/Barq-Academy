@@ -1,9 +1,8 @@
-# BARQ Systems DevOps Assessment
+ BARQ Academy DevOps Assessment
 
 This repository contains the implementation, investigation evidence, validation
 scripts, failure testing, persistence testing, backup/restore procedures,
-security review, engineering decisions, and CI configuration for the BARQ
-Systems DevOps assessment.
+security review, engineering decisions, and CI configuration for the BARQ  DevOps assessment.
 
 ## Current verified environment
 
@@ -106,49 +105,6 @@ Verify:
 
 Docker commands may require `sudo` depending on local Docker permissions.
 
-## Configuration
-
-Create a local environment file:
-
-    cp .env.example .env
-
-Edit `.env` and set a local PostgreSQL password:
-
-    nano .env
-
-Example:
-
-    PUBLIC_PORT=8080
-    POSTGRES_PASSWORD=change-this-locally
-
-Never commit `.env` or real credentials.
-
-## Build
-
-    sudo docker compose build
-
-## Start
-
-    sudo docker compose up -d
-
-Check the services:
-
-    sudo docker compose ps
-
-Wait until all required health checks report healthy.
-
-## Stop
-
-Stop containers:
-
-    sudo docker compose stop
-
-Remove containers while preserving named volumes:
-
-    sudo docker compose down
-
-Do not use `docker compose down -v` during persistence testing because
-that removes the PostgreSQL and Redis named volumes.
 
 ## HTTP endpoints
 
@@ -226,55 +182,6 @@ The verified run achieved:
     Errors:          0/20
     After recovery: 20/20 successful
 
-## PostgreSQL persistence
-
-Create a record:
-
-    curl -s -X POST http://127.0.0.1:8080/records \
-      -H 'Content-Type: application/json' \
-      -d '{"name":"CONTAINER_RECREATE_TEST","description":"Prove PostgreSQL data survives container recreation"}'
-
-Verify it:
-
-    curl -s http://127.0.0.1:8080/records
-
-PostgreSQL uses the named volume `postgres-data`.
-
-The persistence test recreates the PostgreSQL container while retaining the
-volume and verifies that the record survives.
-
-## PostgreSQL backup
-
-Run:
-
-    ./backup.sh
-
-Backups are written to:
-
-    backups/
-
-Generated backup files are ignored by Git.
-
-## PostgreSQL restore
-
-Usage:
-
-    ./restore.sh backups/<backup-file>.sql
-
-The restore script restores a compatible PostgreSQL dump into the target
-database. A clean full restore may require recreating the target database
-first.
-
-## Log investigation
-
-The original logs are preserved under:
-
-    logs/
-
-The investigation is documented in:
-
-    log_analysis.md
-
 The analysis covers:
 
 - Log validity
@@ -288,22 +195,6 @@ The analysis covers:
 - Cross-log correlation
 - Timeline
 - Root-cause conclusions
-
-The original log files were not modified.
-
-## Troubleshooting journal
-
-Investigation steps, hypotheses, commands, failed attempts, fixes, and retests
-are documented in:
-
-    troubleshooting.md
-
-## Engineering decisions
-
-Engineering decisions, assumptions, alternatives, trade-offs, and limitations
-are documented in:
-
-    decisions.md
 
 ## Security review
 
@@ -351,42 +242,3 @@ The assessment requires a live troubleshooting demonstration using:
 
 The challenge must be run for the first time in the video working copy.
 
-The final demonstration will:
-
-- Diagnose and fix the injected runtime problem
-- Avoid `docker compose down`
-- Change the public port from 8080 to 8090
-- Add a third application instance
-- Demonstrate all three instances
-- Re-run validation
-- Show Git status and diffs
-- Show commit hashes
-- Push the final commits
-
-## Evidence
-
-Assessment evidence is tracked in:
-
-    docs/EVIDENCE_INDEX.md
-
-The evidence index maps requirements to repository files, commands,
-commits, validation evidence, and final video timestamps.
-
-## Cleanup
-
-To remove containers while preserving data:
-
-    sudo docker compose down
-
-To intentionally delete persistent data:
-
-    sudo docker compose down -v
-
-The second command is destructive to the PostgreSQL and Redis volumes.
-
-## Verification rule
-
-Only claim a fix when it has been reproduced and verified.
-
-Commands, failed attempts, test results, and conclusions used as assessment
-evidence are documented in the investigation and evidence files.
