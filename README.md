@@ -4,6 +4,10 @@ This repository contains the implementation, investigation evidence, validation
 scripts, failure testing, persistence testing, backup/restore procedures,
 security review, engineering decisions, and CI configuration for the BARQ  DevOps assessment.
 
+
+<img width="435" height="580" alt="image" src="https://github.com/user-attachments/assets/0b64fa43-b2ea-4461-9f0b-6d2666153b1b" />
+
+
 ## Current verified environment
 
 The currently verified environment contains:
